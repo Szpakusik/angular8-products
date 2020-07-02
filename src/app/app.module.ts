@@ -7,16 +7,19 @@ import { UserViewComponent } from './user-view/user-view.component';
 import { AdminViewComponent } from './admin-view/admin-view.component';
 import { RoutesModule } from './routes/routes.module';
 
+import { HttpClientModule } from '@angular/common/http';
+
 @NgModule({
   declarations: [
     AppComponent,
     UserViewComponent,
-    AdminViewComponent
+    AdminViewComponent,
   ],
   imports: [
     RoutesModule,
     BrowserModule,
-    MDBBootstrapModule.forRoot()
+    MDBBootstrapModule.forRoot(),
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
