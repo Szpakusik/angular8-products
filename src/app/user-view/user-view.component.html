@@ -1,5 +1,22 @@
 <div class="row-fluid row w-100 mx-auto pt-2">
-  <div class="col-12 col-lg-4"></div>
+  <div class="col-12 col-lg-4 pl-0">
+
+    <div class="btn-group mt-lg-4" mdbDropdown>
+      <button mdbBtn mdbDropdownToggle type="button" outline=true color="elegant" class="dropdown-toggle waves-light"
+        mdbWavesEffect>
+        Kategorie
+      </button>
+    
+      <div class="dropdown-menu dropdown-primary">
+        <a class="dropdown-item" href="#">Action</a>
+        <a class="dropdown-item" href="#">Another action</a>
+        <a class="dropdown-item" href="#">Something else here</a>
+        <div class="divider dropdown-divider"></div>
+        <a class="dropdown-item" href="#">Separated link</a>
+      </div>
+    </div>
+
+  </div>
   <div class="col-12 col-lg-4">
     <h3 class="w-100 text-center p-3 dark-text font-weight-bold">Produkty</h3>
   </div>
@@ -19,16 +36,13 @@
         <div class="list-group w-100">
 
           <ng-template [ngIf]="products.length > 1" [ngIfElse]="none">
-            <a href="#" *ngFor="let item of products | filter:term" class="list-group-item list-group-item-action flex-column align-items-start">
+            <a href="#" *ngFor="let item of products | filter:term | slice:0:counter; index as i" class="list-group-item list-group-item-action flex-column align-items-start">
               <div class="row">
-                <div class="col-4 col-lg-2 p-0" [ngStyle]="{ 'background-image': 'url(' + item.photo + ')', 'background-size': '100% 100%' }">
-                  <!-- <img [src]="item.photo" alt="thumbnail" class="img-thumbnail"
-                  style="width: 100%; height:100%"> -->
-                </div>
+                <div class="col-4 col-lg-2 p-0" [ngStyle]="{ 'background-image': 'url(' + item.photo + ')', 'background-size': '100% 100%' }"></div>
                 <div class="col-8 col-lg-10">
                   <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1 font-weight-bold lime-text">{{ item.name }}</h5>
-                    <small class="font-weight-bold h5">{{item.price}} zł</small>
+                    <h5 class="mb-1 font-weight-bold">{{ item.name }}</h5>
+                    <small class="font-weight-bold h5 lime-text">{{item.price}} zł</small>
                   </div>
                   <p class="mb-1 pr-5">Donec id elit non mi porta gravida at eget metus.Donec id elit non mi porta gravida at eget metus.Donec id elit non mi porta gravida at eget metus.Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius
                     blandit.</p>
@@ -36,6 +50,11 @@
                 </div>      
               </div>
             </a>
+
+          <button (click)="showMore()" mdbBtn mdbWavesEffect type="button" outline=true color="elegant" class="mx-auto mt-4 w-25 waves-light">
+            Pokaż więcej
+          </button>
+
           </ng-template>    
           <ng-template #none>
             

@@ -15,6 +15,8 @@ export class UserViewComponent implements OnInit {
 
   term: string = '';
 
+  counter: number = 3;
+
   constructor(private api: ApiService) {}
 
   getProducts() {
@@ -31,7 +33,10 @@ export class UserViewComponent implements OnInit {
       console.log(this.products)   
       }
     );
+  }
 
+  showMore(){
+    this.counter += 3;
   }
 
   ngOnInit(): void {
