@@ -8,18 +8,23 @@ import { AdminViewComponent } from './admin-view/admin-view.component';
 import { RoutesModule } from './routes/routes.module';
 
 import { HttpClientModule } from '@angular/common/http';
+import { NameFilterPipe } from './name-filter.pipe';
+
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
     AppComponent,
     UserViewComponent,
     AdminViewComponent,
+    NameFilterPipe,
   ],
   imports: [
     RoutesModule,
     BrowserModule,
     MDBBootstrapModule.forRoot(),
     HttpClientModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
