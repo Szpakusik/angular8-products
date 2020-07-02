@@ -13,6 +13,7 @@ export class UserViewComponent implements OnInit {
   products: Product[] = [];
   smartphone: any[] = [];
 
+  term: string = '';
 
   constructor(private api: ApiService) {}
 
