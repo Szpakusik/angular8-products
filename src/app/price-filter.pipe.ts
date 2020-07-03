@@ -17,12 +17,12 @@ export class PriceFilterPipe implements PipeTransform {
       console.log(price_to);
 
       if( price_from === null ) {
-        return product.price <= price_to;
+        return product.price[0].price <= price_to;
       }
       if( price_to === null ) {
-        return product.price >= price_from;
+        return product.price[0].price >= price_from;
       }
-      return product.price <= price_to && product.price >= price_from;
+      return product.price[0].price <= price_to && product.price[0].price >= price_from;
     } );
 
     prodMeta.count = returned.length
