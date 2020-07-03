@@ -1,5 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Product } from '../models/Product';
+import { Component, OnInit, Input, Output } from '@angular/core';
+import { ApiService } from '../api.service';
+import { Product } from '../models/Product'
+import { EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-product',
@@ -9,16 +11,34 @@ import { Product } from '../models/Product';
 export class ProductComponent implements OnInit {
 
   @Input() public item: Product;
+  @Input() public isAdmin: boolean;
 
+  @Output() public onEvent = new EventEmitter();
+  
   priceOptionId: number = 0;
 
-  constructor() { }
+  spresp: any;
+  postdata: Product;
+
+  constructor(private api: ApiService) { }
 
   ngOnInit(): void {
     // console.log(this.item);
     
   }
+  
+  deleteProduct(id: any) {
+    
+    if( !confirm('Na pewno chesz usunąć produkt?') ) return false;
 
+    this.api
+      .deleteData(id)
+      .subscribe(resp => {
+        console.log(resp);
+        this.onEvent.emit(null)
+        // return this.spresp.push(resp);
+      });
+  }
   changePriceOption(option:number):void {
     this.priceOptionId = option;
   }
