@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ApiService } from '../api.service';
 import { Product } from '../models/Product'
+import { FileUploader } from 'ng2-file-upload';
 
 @Component({
   selector: 'app-user-view',
@@ -25,7 +26,30 @@ export class UserViewComponent implements OnInit {
   spresp: any;
   postdata: Product;
 
-  constructor(private api: ApiService) {}
+  isEditing: boolean = false;
+
+  tempProduct:{
+    name:string,
+    price: number,
+    photo: "",
+    description: string,
+    category: string,
+    weight: string,
+  } = {
+    name:"",
+    price: 0,
+    photo: "",
+    description: "",
+    category: "",
+    weight: "",
+  }
+
+  constructor(
+    private api: ApiService
+    
+  ) {}
+
+  public uploader: FileUploader = new FileUploader({ url: "http://localhost:3002/upload/photo", itemAlias: 'file' });
 
   getProducts() {
     this.api.getData()
@@ -48,13 +72,20 @@ export class UserViewComponent implements OnInit {
     );
   }
 
-  // addProduct() {
-  //   this.api
-  //     .addSmartphone(this.postdata)
-  //     .subscribe(resp => {
-  //       return this.spresp.push(resp);
-  //     });
-  // }
+  addProduct() {
+    // if( this.tempProduct.photo.length === 0 ) {
+    //   alert("Najpierw dodaj zdjęcie!"); 
+    //   return false;
+    // }
+    if( !confirm('Produkt gotowy do dodania?') ) return false;
+    if( this.tempProduct.category.length ) {
+      alert("Nadaj kategorię!")
+      return false;
+    }
+    console.log(this.tempProduct);
+    this.uploader.uploadAll()
+
+  }
 
   // addPrices() {
   //   let tempTable = this.products.filter( (product) => { return product.price < 9 });
@@ -81,9 +112,32 @@ export class UserViewComponent implements OnInit {
     this.category = cat;
     this.counter = 3;
   }
+  setTempCategory( cat: string ){
+    this.tempProduct.category = cat;
+  }
+
+  setIsEditing( status:boolean ){
+    this.isEditing = status;
+  }
 
   ngOnInit(): void {
     this.getProducts();
+
+
+    this.uploader.onAfterAddingFile = (file) => { file.withCredentials = false; };
+    this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
+        
+        this.tempProduct.photo = response.filename;
+        console.log(response);
+        // alert('Your file has been uploaded successfully');
+        this.api
+          .addData(this.tempProduct)
+          .subscribe(resp => {
+            console.log(resp);
+            return this.spresp.push(resp);
+          });
+
+    };
   }
 
 }

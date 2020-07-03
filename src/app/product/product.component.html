@@ -26,7 +26,7 @@
             </div>
             <ng-template [ngIf]="isAdmin">
                 <div class="row ml-auto">
-                    <a mdbBtn class="w-75 h-75 text-center mt-4 waves-effect" floating="true" size="" color="elegant" outline='true'><mdb-icon fas icon="pen"></mdb-icon></a>
+                    <a mdbBtn (click)="handleEditClick()" class="w-75 h-75 text-center mt-4 waves-effect" floating="true" size="" color="elegant" outline='true'><mdb-icon fas icon="pen"></mdb-icon></a>
                     <!-- <mdb-icon fas icon="pen"></mdb-icon> -->
                 </div>
                 <div class="row ml-auto">

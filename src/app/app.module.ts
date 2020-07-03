@@ -18,6 +18,8 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpErrorInterceptor } from '../interceptors/HttpErrorInterceptor';
 import { ProductComponent } from './product/product.component';
 
+import { FileUploadModule } from 'ng2-file-upload';
+
 
 @NgModule({
   declarations: [
@@ -34,7 +36,8 @@ import { ProductComponent } from './product/product.component';
     BrowserModule,
     MDBBootstrapModule.forRoot(),
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    FileUploadModule
   ],
   providers: [
     {

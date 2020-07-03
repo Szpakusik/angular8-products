@@ -22,10 +22,9 @@ export class ApiService {
     return this.http.post(localUrl+"/delete", {id} );
   }
 
-
-
-
-
+  addData(productData){
+    return this.http.post(localUrl+"/add", productData );
+  }
 
   // updatePrices( products: Product[] ): Observable<any> {
   //   return this.http.post<Product>(localPriceUrl, products)
@@ -34,32 +33,6 @@ export class ApiService {
   //     );
   // }
 
-  // addProduct(product: Product): Observable<any> {
-  //   return this.http.post<Product>(localUrl+"/products", product)
-  //     .pipe(
-  //       catchError(this.handleError('addSmartphone', product))
-  //     );
-  // }
 
-  // getSmartphone(): Observable<any> {
-  //   return this.http.get<Product[]>(localUrl)
-  //   .pipe(
-  //     retry(3), catchError(this.handleError<Product[]>('getSmartphone', [])));
-  // }
-  
-
-
-  private handleError<T>(operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
-      console.error(error);
-      this.log(`${operation} failed: ${error.message}`);
-  
-      return of(result as T);
-    };
-  }
-  
-  private log(message: string) {
-    console.log(message);
-  }
 
 }
