@@ -1,0 +1,25 @@
+<div href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+    <div class="row">
+    <div class="col-4 col-lg-2 p-0" [ngStyle]="{ 'background-image': 'url(' + item.photo + ')', 'background-size': '100% 100%' }"></div>
+    <div class="col-8 col-lg-10">
+        <div class="d-flex w-100 justify-content-between">
+        <div>
+
+            <h5 class="mb-1 font-weight-bold">{{ item.name }}</h5>
+
+            
+            <select (change)="changePriceOption($event.target.value)" name="prices" class="prices">
+                <option *ngFor="let price of item.price; index as i" [value]="i" [id] = "'price'+i">{{price.p_option}}</option>
+            </select>
+
+
+        </div>
+        <small class="font-weight-bold h5 lime-text">{{ item.price[priceOptionId].price.toFixed(2) }} zł</small>
+        </div>
+        <small class="mb-1">Donec id elit non mi porta.</small>
+
+        <p class="mb-1 pr-5">Donec id elit non mi porta gravida at eget metus.Donec id elit non mi porta gravida at eget metus.Donec id elit non mi porta gravida at eget metus.Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius
+        blandit.</p>
+    </div>      
+    </div>
+</div>

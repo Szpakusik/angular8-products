@@ -16,6 +16,7 @@ import { PriceFilterPipe } from './price-filter.pipe';
 
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpErrorInterceptor } from '../interceptors/HttpErrorInterceptor';
+import { ProductComponent } from './product/product.component';
 
 
 @NgModule({
@@ -26,6 +27,7 @@ import { HttpErrorInterceptor } from '../interceptors/HttpErrorInterceptor';
     NameFilterPipe,
     CategoryFilterPipe,
     PriceFilterPipe,
+    ProductComponent,
   ],
   imports: [
     RoutesModule,
