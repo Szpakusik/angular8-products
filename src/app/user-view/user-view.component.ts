@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ApiService } from '../api.service';
 import { Product } from '../models/Product'
 
@@ -9,6 +9,7 @@ import { Product } from '../models/Product'
 })
 export class UserViewComponent implements OnInit {
 
+  @Input() public isAdmin: boolean;
   
   products: Product[] = [];
   smartphone: any[] = [];
@@ -21,11 +22,15 @@ export class UserViewComponent implements OnInit {
 
   counter: number = 3;
 
+  spresp: any;
+  postdata: Product;
+
   constructor(private api: ApiService) {}
 
   getProducts() {
     this.api.getData()
       .subscribe(data => {
+        this.products=[];
         for (const d of (data as any)) {
 
           this.products.push( new Product(
@@ -42,6 +47,27 @@ export class UserViewComponent implements OnInit {
       }
     );
   }
+
+  // addProduct() {
+  //   this.api
+  //     .addSmartphone(this.postdata)
+  //     .subscribe(resp => {
+  //       return this.spresp.push(resp);
+  //     });
+  // }
+
+  // addPrices() {
+  //   let tempTable = this.products.filter( (product) => { return product.price < 9 });
+  //   tempTable.map( (prod) => { prod.price *= 2; return prod } )
+  //   console.log(tempTable)
+  //   this.api.updatePrices(tempTable)
+  //     .subscribe(resp => {
+
+  //       console.log(resp);
+  //       return this.spresp.push(resp);
+
+  //     });
+  // }
 
   showMore(){
     this.counter += 3;

@@ -59,7 +59,7 @@
 
           <ng-template [ngIf]="products.length > 1" [ngIfElse]="none">
             
-              <app-product *ngFor="let item of products | filter:term | categoryFilter:category | priceFilter:price_from:price_to:prodMeta | slice:0:counter; index as i" [item]="item"></app-product>
+              <app-product *ngFor="let item of products | filter:term | categoryFilter:category | priceFilter:price_from:price_to:prodMeta | slice:0:counter; index as i" [item]="item" (onEvent) = "this.getProducts()" [isAdmin]="this.isAdmin"></app-product>
 
             <ng-template [ngIf]="prodMeta.count === 0">
               <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
