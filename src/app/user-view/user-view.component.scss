@@ -4,6 +4,10 @@ div.list-group-item-action:hover{
     cursor: unset;
 }
 
+p.dropdown-item{
+  cursor: pointer
+}
+
 .list-group-item-action:nth-child(odd):hover {background-color: #f5f5f5!important}
 .list-group-item-action:nth-child(even):hover {background-color: white!important}
 

@@ -5,7 +5,7 @@ import { Observable, of } from 'rxjs';
 import { Product } from './models/Product';
 
 
-const localUrl = 'http://localhost:3002/upload';
+const localUrl = 'http://api.projekt2.webplace.pl/upload';
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +24,21 @@ export class ApiService {
 
   addData(productData){
     return this.http.post(localUrl+"/add", productData );
+  }
+
+  addPriceData(priceData){
+    return this.http.post(localUrl+"/prices/add", priceData );
+  }
+  deletePriceData(priceData){
+    return this.http.post(localUrl+"/prices/delete", priceData );
+  }
+
+  getSingle(id){
+    return this.http.get(localUrl+"/product/"+id);
+  }
+
+  changeData(productData){
+    return this.http.put(localUrl+"/product", productData);
   }
 
   // updatePrices( products: Product[] ): Observable<any> {

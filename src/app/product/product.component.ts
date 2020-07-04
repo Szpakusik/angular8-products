@@ -41,8 +41,8 @@ export class ProductComponent implements OnInit {
       });
   }
 
-  handleEditClick(){
-    this.onEditClick.emit(null)
+  handleEditClick(tempId:number){
+    this.onEditClick.emit(tempId)
   }
 
   changePriceOption(option:number):void {

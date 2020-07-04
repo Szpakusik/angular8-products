@@ -2,13 +2,12 @@
   <ng-template [ngIf]="!isEditing" [ngIfElse]="editor">
     <div class="col-12 col-lg-4 pl-0">
 
-      <div class="btn-group mt-lg-4" mdbDropdown>
-        <button mdbBtn mdbDropdownToggle type="button" outline=true color="elegant" class="dropdown-toggle waves-light"
-          mdbWavesEffect>
+      <div class="btn-group " mdbDropdown>
+        <button mdbBtn mdbDropdownToggle type="button" outline=true color="elegant" class="mt-lg-4 dropdown-toggle waves-light w-75" mdbWavesEffect>
           Kategorie
         </button>
       
-        <div class="dropdown-menu dropdown-primary">
+        <div class="dropdown-menu dropdown-primary mt-5">
           <a class="dropdown-item" (click)="setCategory('produkty-zbozowe');" href="#">Produkty Zbożowe</a>
           <a class="dropdown-item" (click)="setCategory('nabial')" href="#">Nabiał i Tłuszcze</a>
           <a class="dropdown-item" (click)="setCategory('chemia')" href="#">Chemia</a>
@@ -19,7 +18,11 @@
           <a class="dropdown-item" (click)="setCategory('wszystkie')" href="#">Pokaż Wszystkie</a>
         </div>
       </div>
-
+      <ng-template [ngIf]="isAdmin">
+        <button mdbBtn (click)="this.setIsEditing(true)" type="button" outline=true color="elegant" class="waves-light ml-1 mt-lg-4 mb-0" mdbWavesEffect>
+          Dodaj produkt
+        </button>
+      </ng-template>      
     </div>
     <div class="col-12 col-lg-4">
       <h3 class="w-100 text-center  pb-0 dark-text font-weight-bold">Produkty ({{prodMeta.count}})</h3>
@@ -32,8 +35,7 @@
             </form>
           </div>
         </div>
-        <div class="col-6 col-lg-
-        ">
+        <div class="col-6 col-lg-4">
           <div class="md-form float-right">
             <form id="filter ">
               <input mdbInput [min]="price_from+1" max=10000 type="number" id="price_to" class="form-control" [(ngModel)]="price_to" [ngModelOptions]="{standalone: true}" (keyup)="resetCounter()">
@@ -67,8 +69,8 @@
       </div>
 
       <div class="row md-form">
-        <input mdbInput [(ngModel)]="tempProduct.weight" type="text" id="nameInput" class="form-control">
-        <label for="nameInput" class="">Waga (np "100ml")</label>
+        <input mdbInput [(ngModel)]="tempProduct.weight" type="text" id="weightInput" class="form-control">
+        <label for="weightInput" class="">Waga (np "100ml")</label>
       </div>
       
       
@@ -76,7 +78,7 @@
     </div>
     <div class="col-12 col-lg-4 pt-5 px-4 text-center" style="min-height: 350px;">
       <h3 class="w-100 text-center pb-0 dark-text font-weight-bold">Dodaj produkt</h3>
-
+      
       <div class="row pt-4">
         <!-- <div class="col-12 col-lg-6">
           <div class="md-form">
@@ -94,37 +96,56 @@
               </button>
             
               <div class="dropdown-menu dropdown-primary">
-                <a class="dropdown-item" (click)="setTempCategory('produkty-zbozowe');" href="#">Produkty Zbożowe</a>
-                <a class="dropdown-item" (click)="setTempCategory('nabial')" href="#">Nabiał i Tłuszcze</a>
-                <a class="dropdown-item" (click)="setTempCategory('chemia')" href="#">Chemia</a>
-                <a class="dropdown-item" (click)="setTempCategory('owoce')" href="#">Warzywa i Owoce</a>
-                <a class="dropdown-item" (click)="setTempCategory('mieso')" href="#">Mięso i Wędliny</a>
-                <a class="dropdown-item" (click)="setTempCategory('przekaski')" href="#">Słodycze i Przekąski</a>
+                <p class="dropdown-item" (click)="setTempCategory('produkty-zbozowe');" href="#">Produkty Zbożowe</p>
+                <p class="dropdown-item" (click)="setTempCategory('nabial')" href="#">Nabiał i Tłuszcze</p>
+                <p class="dropdown-item" (click)="setTempCategory('chemia')" href="#">Chemia</p>
+                <p class="dropdown-item" (click)="setTempCategory('owoce')" href="#">Warzywa i Owoce</p>
+                <p class="dropdown-item" (click)="setTempCategory('mieso')" href="#">Mięso i Wędliny</p>
+                <p class="dropdown-item" (click)="setTempCategory('przekaski')" href="#">Słodycze i Przekąski</p>
                 <div class="divider dropdown-divider"></div>
-                <a class="dropdown-item" (click)="setCategory('wszystkie')" href="#">Pokaż Wszystkie</a>
+                <p class="dropdown-item" (click)="setCategory('wszystkie')" href="#">Pokaż Wszystkie</p>
               </div>
             </div>
             <h5 class="font-weight-bold w-100 mt-2">{{tempProduct.category}}</h5>
 
           </div>
+          <table class="w-100 mt-3">
+            <tr>
+              <th>Opcja</th>
+              <th>Cena</th>
+              <th></th>
+            </tr>
+            <tr *ngFor="let price of tempProduct.price">
+              <td>{{price.p_option}}</td><td>{{price.price}}</td><td (click)="deletePrice(price.p_option, price.product_id); setTempObject()" color="red">x</td>
+            </tr>
 
-          <div class="md-form">
-            <input type="number" [(ngModel)]="tempProduct.price" id="priceOptionNumber2" class=" pt-5 form-control" >
-            <label for="priceOptionNumber2">Cena</label>
+          </table>
+          <div class="row">
+
+            <div class="md-form col-6">
+              <input [(ngModel)]="tempOption" type="text" id="priceOptionNumber2" class=" pt-5 form-control" >
+              <label for="priceOptionNumber2">Opcja</label>
+            </div>
+            <div class="md-form col-6">
+              <input [(ngModel)]="tempOptionPrice" type="number" id="priceOptionNumber3" class=" pt-5 form-control" >
+              <label for="priceOptionNumber3">Cena</label>
+            </div>
+
           </div>
 
+          <button mdbBtn (click)="addPrice(tempId, tempOption, tempOptionPrice);setTempObject()" mdbWavesEffect type="button" outline=true color="elegant" class="mt-0 btn-sm mx-auto mt-2 mb-5 waves-light">
+            <mdb-icon fas icon="plus"></mdb-icon>
+          </button>
         </div>
       </div>
       
-      <!-- <button mdbBtn mdbWavesEffect type="button" outline=true color="elegant" class="mt-0 btn-sm mx-auto mt-2 mb-5 waves-light">
-        <mdb-icon fas icon="plus"></mdb-icon>
-      </button> -->
+      
 
     </div>
     <div class="col-12 col-lg-4 pt-5 px-4" style="min-height: 350px;">
       <div class="form-group pt-5">
         <label for="exampleFormControlTextarea2">Podaj opis</label>
-        <textarea class="form-control rounded-0" [(ngModel)]="tempProduct.description" id="exampleFormControlTextare2" rows="6"></textarea>
+        <textarea class="form-control rounded-0" [(ngModel)]="tempProduct.description" id="exampleFormControlTextare2" rows="8"></textarea>
       </div>
 
 
@@ -137,7 +158,7 @@
 
           <ng-template [ngIf]="products.length > 1 && !isEditing">
             
-              <app-product *ngFor="let item of products | filter:term | categoryFilter:category | priceFilter:price_from:price_to:prodMeta | slice:0:counter; index as i" [item]="item" (onDelete) = "this.getProducts()" (onEditClick)="this.setIsEditing(true)" [isAdmin]="this.isAdmin"></app-product>
+              <app-product *ngFor="let item of products | filter:term | categoryFilter:category | priceFilter:price_from:price_to:prodMeta | slice:0:counter; index as i" [item]="item" (onDelete) = "this.getProducts()" (onEditClick)="setTempId($event); this.setIsEditing(true); setTempObject()" [isAdmin]="this.isAdmin"></app-product>
 
               <ng-template [ngIf]="prodMeta.count === 0">
                 <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
@@ -149,7 +170,7 @@
 
           </ng-template>    
 
-          <ng-template [ngIf]="products.length > 1" [ngIfElse]="editButtons">
+          <ng-template [ngIf]="products.length < 1" >
             
             <div class="row text-center mx-auto">
               <p>Wczytywanie produktów...</p>
@@ -168,18 +189,18 @@
           </button>
         </ng-template>
 
-        <ng-template #editButtons>
-          <div class="row">
+        <ng-template [ngIf]="isEditing">
+          <div class="row w-100">
             <div class="col-6 text-right">
-              <button mdbBtn mdbWavesEffect type="button" outline=true color="elegant" class="mx-auto mt-2 mb-5 waves-light">
+              <button mdbBtn mdbWavesEffect (click)="setIsEditing(false); cleanTempObject()" type="button" outline=true color="elegant" class="mx-auto mt-2 mb-5 waves-light">
                 Anuluj
               </button>
             </div>
             <div class="col-6 text-left">
               <button mdbBtn mdbWavesEffect (click)="addProduct()" type="button" outline=true color="elegant" class="mx-auto mt-2 mb-5 waves-light"
               (click)="uploader.uploadAll()" 
-              [disabled]="!uploader.getNotUploadedItems().length">
-                Dodaj
+              [disabled]="!validate()">
+                {{tempId ? "Edytuj":"Dodaj"}}
               </button>
             </div>
           </div>
