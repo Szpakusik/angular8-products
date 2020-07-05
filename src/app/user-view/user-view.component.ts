@@ -48,7 +48,7 @@ export class UserViewComponent implements OnInit {
     id: -1
   }
 
-  tempOption:"";
+  tempOption="Domyślna cena";
   tempOptionPrice=0;
 
   constructor(
@@ -67,7 +67,7 @@ export class UserViewComponent implements OnInit {
           this.products.push( new Product(
             d.name,
             d.price,
-            "http://api.projekt2.webplace.pl/upload"+d.photo,
+            "http://api.projekt2.webplace.pl/"+d.photo,
             d.nutritional_table,
             d.category,
             d.id,
@@ -83,33 +83,49 @@ export class UserViewComponent implements OnInit {
   addProduct() {
 
     if( !confirm('Produkt gotowy do dodania?') ) return false;
-    else if(!this.tempId){
-      console.log(this.tempProduct);
+    
+    
+    
+    this.tempProduct.price = this.tempOptionPrice; // 0 to ng model
+    
+    if(this.uploader.getNotUploadedItems().length){
+
       this.uploader.uploadAll();
-    }
-    else{
-      if(this.uploader.getNotUploadedItems().length){
 
-        this.uploader.uploadAll();
+    }else{
 
-      }else{
+      if(this.tempId > 0){
 
+        
         this.api
           .changeData(this.tempProduct)
           .subscribe(resp => {
             console.log(resp);
+            this.getProducts();
+            this.setIsEditing(false);
           });
 
       }
-    }
 
+      else{
+
+        this.api
+          .addData(this.tempProduct)
+          .subscribe(resp => {
+            console.log(resp);
+            this.getProducts();
+            this.setIsEditing(false);
+          });
+      }
+    }
   }
 
   addPrice(id, p_option, price) {
     this.api
       .addPriceData({id, p_option, price})
       .subscribe(resp => {
-        console.log(resp);
+          this.setTempObject();
+          console.log(resp);
       });
   }
 
@@ -117,6 +133,7 @@ export class UserViewComponent implements OnInit {
     this.api
       .deletePriceData({ p_option, prodId })
       .subscribe(resp => {
+        this.setTempObject();
         console.log(resp);
       });
   }
@@ -159,11 +176,15 @@ export class UserViewComponent implements OnInit {
   setIsEditing( status:boolean ){
     this.isEditing = status;
     console.log(this.tempId);
-    this.api
-      .addData(this.tempProduct)
-      .subscribe(resp => {
-        console.log(resp);
-      });
+    this.tempOption="Domyślna cena";
+    if(this.tempId > 0){
+      this.api
+        .getSingle(this.tempProduct.id)
+        .subscribe(resp => {
+          console.log(resp);
+        });
+    }
+    
     
   }
 
@@ -184,37 +205,49 @@ export class UserViewComponent implements OnInit {
   }
 
   validate(){
+    
+    
+    console.log("VALIDATE")
     console.log(this.tempProduct.name.length > 0 &&
-      this.tempProduct.price > 0 &&
+      (this.tempOptionPrice > 0 || this.tempId > 0) &&
       this.tempProduct.description.length > 0 &&
       this.tempProduct.category.length > 0 &&
       this.tempProduct.weight.length > 0);
+    console.log("this.tempProduct")
+    console.log(this.tempProduct)
     
     return this.tempProduct.name.length &&
-    this.tempProduct.price &&
+    (this.tempOptionPrice > 0 || this.tempId > 0) &&
     this.tempProduct.description.length &&
     this.tempProduct.category.length &&
     this.tempProduct.weight.length
   }
 
   ngOnInit(): void {
+    
     this.getProducts();
 
 
     this.uploader.onAfterAddingFile = (file) => { file.withCredentials = false; };
     this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
         
-      if(!this.tempId){
+      if(this.tempProduct.id < 0){
+
+        this.tempProduct.price = this.tempOptionPrice; // 0 to ng model
 
         let res = JSON.parse(response)
         this.tempProduct.photo = res.filename;
+
         this.api
         .addData(this.tempProduct)
         .subscribe(resp => {
           console.log(resp);
+          this.setIsEditing(false);
+          this.getProducts();
         });
 
       }else{
+        this.tempProduct.price = this.tempOptionPrice; // 0 to ng model
 
         let res = JSON.parse(response)
         this.tempProduct.photo = res.filename;
@@ -222,6 +255,8 @@ export class UserViewComponent implements OnInit {
           .changeData(this.tempProduct)
           .subscribe(resp => {
             console.log(resp);
+            this.setIsEditing(false);
+            this.getProducts();
           });
 
       }

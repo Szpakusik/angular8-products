@@ -102,8 +102,6 @@
                 <p class="dropdown-item" (click)="setTempCategory('owoce')" href="#">Warzywa i Owoce</p>
                 <p class="dropdown-item" (click)="setTempCategory('mieso')" href="#">Mięso i Wędliny</p>
                 <p class="dropdown-item" (click)="setTempCategory('przekaski')" href="#">Słodycze i Przekąski</p>
-                <div class="divider dropdown-divider"></div>
-                <p class="dropdown-item" (click)="setCategory('wszystkie')" href="#">Pokaż Wszystkie</p>
               </div>
             </div>
             <h5 class="font-weight-bold w-100 mt-2">{{tempProduct.category}}</h5>
@@ -123,7 +121,7 @@
           <div class="row">
 
             <div class="md-form col-6">
-              <input [(ngModel)]="tempOption" type="text" id="priceOptionNumber2" class=" pt-5 form-control" >
+              <input [(ngModel)]="tempOption" [disabled]="tempId < 0" value="Domyślna" type="text" id="priceOptionNumber2" class="pt-5 form-control" >
               <label for="priceOptionNumber2">Opcja</label>
             </div>
             <div class="md-form col-6">
@@ -132,10 +130,12 @@
             </div>
 
           </div>
-
-          <button mdbBtn (click)="addPrice(tempId, tempOption, tempOptionPrice);setTempObject()" mdbWavesEffect type="button" outline=true color="elegant" class="mt-0 btn-sm mx-auto mt-2 mb-5 waves-light">
-            <mdb-icon fas icon="plus"></mdb-icon>
-          </button>
+          <ng-template  [ngIf]="tempId > 0" [ngIfElse]="new">
+            <button mdbBtn (click)="addPrice(tempId, tempOption, tempOptionPrice)" mdbWavesEffect type="button" outline=true color="elegant" class="mt-0 btn-sm mx-auto mt-2 mb-5 waves-light">
+              <mdb-icon fas icon="plus"></mdb-icon>
+            </button>
+          </ng-template>
+          <ng-template #new > <p>Edytuj po dodaniu aby dodać więcej opcji cenowych! </p></ng-template>
         </div>
       </div>
       
@@ -192,15 +192,15 @@
         <ng-template [ngIf]="isEditing">
           <div class="row w-100">
             <div class="col-6 text-right">
-              <button mdbBtn mdbWavesEffect (click)="setIsEditing(false); cleanTempObject()" type="button" outline=true color="elegant" class="mx-auto mt-2 mb-5 waves-light">
+              <button mdbBtn mdbWavesEffect (click)="setIsEditing(false); cleanTempObject(); getProducts()" type="button" outline=true color="elegant" class="mx-auto mt-2 mb-5 waves-light">
                 Anuluj
               </button>
             </div>
             <div class="col-6 text-left">
-              <button mdbBtn mdbWavesEffect (click)="addProduct()" type="button" outline=true color="elegant" class="mx-auto mt-2 mb-5 waves-light"
-              (click)="uploader.uploadAll()" 
+              <button mdbBtn mdbWavesEffect type="button" outline=true color="elegant" class="mx-auto mt-2 mb-5 waves-light"
+              (click)="addProduct()" 
               [disabled]="!validate()">
-                {{tempId ? "Edytuj":"Dodaj"}}
+                {{tempId > 0 ? "Edytuj":"Dodaj"}}
               </button>
             </div>
           </div>
