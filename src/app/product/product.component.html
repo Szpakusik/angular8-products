@@ -20,9 +20,11 @@
             <p class="mb-1 pr-5">{{item.description}}</p>
         </div> 
         <div class="col-8 col-lg-1">
-            <div class="row" >
-                <p class="lime-text font-weight-bold">{{ item.price[priceOptionId].price.toFixed(2) }} zł</p>
-            </div>
+            <ng-template [ngIf]="item.price[priceOptionId]">
+                <div class="row" >
+                    <p class="lime-text font-weight-bold">{{ item.price[priceOptionId].price.toFixed(2) }} zł</p>
+                </div>
+            </ng-template>
             <ng-template [ngIf]="isAdmin">
                 <div class="row ml-auto">
                     <a mdbBtn (click)="handleEditClick(item.id)" class="w-75 h-75 text-center mt-4 waves-effect" floating="true" size="" color="elegant" outline='true'><mdb-icon fas icon="pen"></mdb-icon></a>
